@@ -173,7 +173,7 @@ class KafkaServer(val config: KafkaConfig, time: Time = SystemTime, threadNamePr
 
         /* generate brokerId */
         config.brokerId =  getBrokerId
-        this.logIdent = "[Kafka Server " + config.brokerId + "], "
+        this.logIdent = "[xccui Kafka Server " + config.brokerId + "], "
 
         socketServer = new SocketServer(config, metrics, kafkaMetricsTime)
         socketServer.startup()

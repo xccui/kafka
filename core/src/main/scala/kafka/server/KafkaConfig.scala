@@ -176,6 +176,8 @@ object Defaults {
   val SaslKerberosMinTimeBeforeRelogin = SaslConfigs.DEFAULT_KERBEROS_MIN_TIME_BEFORE_RELOGIN
   val SaslKerberosPrincipalToLocalRules = SaslConfigs.DEFAULT_SASL_KERBEROS_PRINCIPAL_TO_LOCAL_RULES
 
+  /** ********* Message validator configuration ***********/
+  val Validator = "kafka.validator.DefaultMessageValidator"
 }
 
 object KafkaConfig {
@@ -332,6 +334,9 @@ object KafkaConfig {
   val SaslKerberosMinTimeBeforeReloginProp = SaslConfigs.SASL_KERBEROS_MIN_TIME_BEFORE_RELOGIN
   val SaslKerberosPrincipalToLocalRulesProp = SaslConfigs.SASL_KERBEROS_PRINCIPAL_TO_LOCAL_RULES
 
+  /** ********* Validator Configuration ****************/
+  val ValidatorProp = "message.validator"
+
   /* Documentation */
   /** ********* Zookeeper Configuration ***********/
   val ZkConnectDoc = "Zookeeper host string"
@@ -477,6 +482,8 @@ object KafkaConfig {
   val CompressionTypeDoc = "Specify the final compression type for a given topic. This configuration accepts the standard compression codecs " +
   "('gzip', 'snappy', lz4). It additionally accepts 'uncompressed' which is equivalent to no compression; and " +
   "'producer' which means retain the original compression codec set by the producer."
+
+  val ValidatorDoc = "The validator class for message validation."
 
   /** ********* Kafka Metrics Configuration ***********/
   val MetricSampleWindowMsDoc = CommonClientConfigs.METRICS_SAMPLE_WINDOW_MS_DOC
@@ -674,6 +681,10 @@ object KafkaConfig {
       .define(SaslKerberosMinTimeBeforeReloginProp, LONG, Defaults.SaslKerberosMinTimeBeforeRelogin, MEDIUM, SaslKerberosMinTimeBeforeReloginDoc)
       .define(SaslKerberosPrincipalToLocalRulesProp, LIST, Defaults.SaslKerberosPrincipalToLocalRules, MEDIUM, SaslKerberosPrincipalToLocalRulesDoc)
 
+      /** ********* Validator Configuration ****************/
+      .define(ValidatorProp, STRING, Defaults.Validator, MEDIUM, ValidatorDoc)
+
+
   }
 
   def configNames() = {
@@ -853,6 +864,10 @@ class KafkaConfig(val props: java.util.Map[_, _], doLog: Boolean) extends Abstra
   val saslKerberosTicketRenewJitter = getDouble(KafkaConfig.SaslKerberosTicketRenewJitterProp)
   val saslKerberosMinTimeBeforeRelogin = getLong(KafkaConfig.SaslKerberosMinTimeBeforeReloginProp)
   val saslKerberosPrincipalToLocalRules = getList(KafkaConfig.SaslKerberosPrincipalToLocalRulesProp)
+
+  /** ********* Validator Configuration **************/
+
+  val validatorClass = getString(KafkaConfig.ValidatorProp)
 
   /** ********* Quota Configuration **************/
   val producerQuotaBytesPerSecondDefault = getLong(KafkaConfig.ProducerQuotaBytesPerSecondDefaultProp)

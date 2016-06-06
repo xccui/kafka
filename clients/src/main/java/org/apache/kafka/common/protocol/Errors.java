@@ -93,7 +93,9 @@ public enum Errors {
     GROUP_AUTHORIZATION_FAILED(30,
             new AuthorizationException("Group authorization failed.")),
     CLUSTER_AUTHORIZATION_FAILED(31,
-            new AuthorizationException("Cluster authorization failed."));
+            new AuthorizationException("Cluster authorization failed.")),
+    VALIDATION_FAILED_FAILED(90,
+            new ValidationFailedException("Message validation failed."));
 
     private static final Logger log = LoggerFactory.getLogger(Errors.class);
 

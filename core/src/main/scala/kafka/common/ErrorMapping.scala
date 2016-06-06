@@ -1,19 +1,19 @@
 /**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+  * Licensed to the Apache Software Foundation (ASF) under one or more
+  * contributor license agreements.  See the NOTICE file distributed with
+  * this work for additional information regarding copyright ownership.
+  * The ASF licenses this file to You under the Apache License, Version 2.0
+  * (the "License"); you may not use this file except in compliance with
+  * the License.  You may obtain a copy of the License at
+  *
+  * http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
 
 package kafka.common
 
@@ -24,19 +24,19 @@ import kafka.message.InvalidMessageException
 import scala.Predef._
 
 /**
- * A bi-directional mapping between error codes and exceptions
- */
+  * A bi-directional mapping between error codes and exceptions
+  */
 object ErrorMapping {
   val EmptyByteBuffer = ByteBuffer.allocate(0)
 
-  val UnknownCode : Short = -1
-  val NoError : Short = 0
-  val OffsetOutOfRangeCode : Short = 1
-  val InvalidMessageCode : Short = 2
-  val UnknownTopicOrPartitionCode : Short = 3
-  val InvalidFetchSizeCode  : Short = 4
-  val LeaderNotAvailableCode : Short = 5
-  val NotLeaderForPartitionCode : Short = 6
+  val UnknownCode: Short = -1
+  val NoError: Short = 0
+  val OffsetOutOfRangeCode: Short = 1
+  val InvalidMessageCode: Short = 2
+  val UnknownTopicOrPartitionCode: Short = 3
+  val InvalidFetchSizeCode: Short = 4
+  val LeaderNotAvailableCode: Short = 5
+  val NotLeaderForPartitionCode: Short = 6
   val RequestTimedOutCode: Short = 7
   val BrokerNotAvailableCode: Short = 8
   val ReplicaNotAvailableCode: Short = 9
@@ -47,9 +47,9 @@ object ErrorMapping {
   val OffsetsLoadInProgressCode: Short = 14
   val ConsumerCoordinatorNotAvailableCode: Short = 15
   val NotCoordinatorForConsumerCode: Short = 16
-  val InvalidTopicCode : Short = 17
+  val InvalidTopicCode: Short = 17
   val MessageSetSizeTooLargeCode: Short = 18
-  val NotEnoughReplicasCode : Short = 19
+  val NotEnoughReplicasCode: Short = 19
   val NotEnoughReplicasAfterAppendCode: Short = 20
   // 21: InvalidRequiredAcks
   // 22: IllegalConsumerGeneration
@@ -62,6 +62,9 @@ object ErrorMapping {
   val TopicAuthorizationCode: Short = 29
   val GroupAuthorizationCode: Short = 30
   val ClusterAuthorizationCode: Short = 31
+
+  //Added by xccui
+  val ValidationFailedCode: Short = 90
 
   private val exceptionToCode =
     Map[Class[Throwable], Short](
@@ -86,7 +89,8 @@ object ErrorMapping {
       classOf[NotEnoughReplicasAfterAppendException].asInstanceOf[Class[Throwable]] -> NotEnoughReplicasAfterAppendCode,
       classOf[TopicAuthorizationException].asInstanceOf[Class[Throwable]] -> TopicAuthorizationCode,
       classOf[GroupAuthorizationException].asInstanceOf[Class[Throwable]] -> GroupAuthorizationCode,
-      classOf[ClusterAuthorizationException].asInstanceOf[Class[Throwable]] -> ClusterAuthorizationCode
+      classOf[ClusterAuthorizationException].asInstanceOf[Class[Throwable]] -> ClusterAuthorizationCode,
+      classOf[ValidationFailedException].asInstanceOf[Class[Throwable]] -> ValidationFailedCode
     ).withDefaultValue(UnknownCode)
 
   /* invert the mapping */
@@ -96,10 +100,10 @@ object ErrorMapping {
   def codeFor(exception: Class[Throwable]): Short = exceptionToCode(exception)
 
   def maybeThrowException(code: Short) =
-    if(code != 0)
+    if (code != 0)
       throw codeToException(code).newInstance()
 
-  def exceptionFor(code: Short) : Throwable = codeToException(code).newInstance()
+  def exceptionFor(code: Short): Throwable = codeToException(code).newInstance()
 
-  def exceptionNameFor(code: Short) : String = codeToException(code).getName()
+  def exceptionNameFor(code: Short): String = codeToException(code).getName()
 }
